@@ -13,6 +13,7 @@ import org.springframework.security.web.authentication.logout.HeaderWriterLogout
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter;
+import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
 import org.springframework.security.web.server.authentication.logout.ServerLogoutSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -73,7 +74,28 @@ public class SecurityConfiguration {
                 .deleteCookies()
                 .permitAll()
         )
-        .oauth2Client(Customizer.withDefaults());
+        .oauth2Client(Customizer.withDefaults())
+        /*.headers(
+                        headers -> headers
+                                .httpStrictTransportSecurity(
+                                        hsts -> hsts
+                                                .includeSubDomains(true)
+                                                .preload(true)
+                                                .maxAgeInSeconds(31536000)
+                                )
+                                .addHeaderWriter(
+                                        new XFrameOptionsHeaderWriter(XFrameOptionsHeaderWriter.XFrameOptionsMode.DENY)
+                                )
+                )
+                */
+
+                .requiresChannel(
+                        channel -> channel
+                                .anyRequest()
+                                .requiresSecure()
+                );
+
+    ;
 
         return http.build();
     }
