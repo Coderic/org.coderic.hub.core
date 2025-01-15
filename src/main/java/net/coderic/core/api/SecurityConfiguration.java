@@ -26,7 +26,7 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-/*
+
 
         http
                 .authorizeHttpRequests((authorize) -> authorize
@@ -38,13 +38,12 @@ public class SecurityConfiguration {
                 )
                 .logout((logout) -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("https://coderic.org")
-
+                        .logoutSuccessUrl("/")
                         .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler())
                         .permitAll()
                 )
                 .oauth2Client(Customizer.withDefaults());
-*/
+
         return http.build();
     }
 }
