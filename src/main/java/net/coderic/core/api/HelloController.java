@@ -23,7 +23,7 @@ public class HelloController {
     public ResponseEntity<OAuth2User> getUser(@AuthenticationPrincipal OAuth2User principal) {
         return new ResponseEntity<OAuth2User>(principal, HttpStatus.OK);
     }
-
+    /*
     @GetMapping("/logout")
     public ResponseEntity<Boolean> getLogout(Authentication authentication, HttpServletRequest request, HttpServletResponse response) {
 
@@ -31,4 +31,5 @@ public class HelloController {
 
         return new ResponseEntity<Boolean>(true, HttpStatus.UNAUTHORIZED);
     }
+    */
 }
