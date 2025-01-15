@@ -27,10 +27,13 @@ public class RestClientConfiguration {
     }
 
     @Bean
-    public RestClient restClient(OAuth2AuthorizedClientManager authorizedClientManager,
-                                 OAuth2AuthorizedClientRepository authorizedClientRepository,
-                                 OAuth2ClientHttpRequestInterceptor.ClientRegistrationIdResolver clientRegistrationIdResolver,
-                                 OAuth2ClientHttpRequestInterceptor.PrincipalResolver principalResolver, RestClient.Builder builder) {
+    public RestClient restClient(
+            OAuth2AuthorizedClientManager authorizedClientManager,
+             OAuth2AuthorizedClientRepository authorizedClientRepository,
+             OAuth2ClientHttpRequestInterceptor.ClientRegistrationIdResolver clientRegistrationIdResolver,
+             OAuth2ClientHttpRequestInterceptor.PrincipalResolver principalResolver,
+            RestClient.Builder builder
+    ) {
 
         OAuth2ClientHttpRequestInterceptor requestInterceptor = new OAuth2ClientHttpRequestInterceptor(
                 authorizedClientManager);

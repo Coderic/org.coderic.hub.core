@@ -16,11 +16,6 @@ import org.springframework.security.oauth2.client.web.client.RequestAttributeCli
 @Configuration
 public class ClientRegistrationIdResolverConfiguration {
 
-    /**
-     * This demonstrates a custom {@link ClientRegistrationIdResolver} that simply
-     * resolves the {@code clientRegistrationId} from the current user.
-     * @return a custom {@link ClientRegistrationIdResolver}
-     */
     private static OAuth2ClientHttpRequestInterceptor.ClientRegistrationIdResolver currentUserClientRegistrationIdResolver() {
         SecurityContextHolderStrategy securityContextHolderStrategy = SecurityContextHolder.getContextHolderStrategy();
         return (request) -> {
@@ -30,19 +25,6 @@ public class ClientRegistrationIdResolverConfiguration {
         };
     }
 
-    /**
-     * This demonstrates a composite {@link ClientRegistrationIdResolver} that tries to
-     * resolve the {@code clientRegistrationId} in multiple ways.
-     * <p>
-     * <ol>
-     * <li>resolve the {@code clientRegistrationId} from attributes</li>
-     * <li>use the {@code clientRegistrationId} from OAuth 2.0 or OpenID Connect 1.0
-     * Login</li>
-     * <li>use the default {@code clientRegistrationId}</li>
-     * </ol>
-     * @param defaultClientRegistrationId the default {@code clientRegistrationId}
-     * @return a custom {@link ClientRegistrationIdResolver}
-     */
     private static ClientRegistrationIdResolver compositeClientRegistrationIdResolver(
             String defaultClientRegistrationId) {
         ClientRegistrationIdResolver requestAttributes = new RequestAttributeClientRegistrationIdResolver();
@@ -59,12 +41,6 @@ public class ClientRegistrationIdResolverConfiguration {
         };
     }
 
-    /**
-     * This demonstrates a custom {@link ClientRegistrationIdResolver} that requires
-     * authentication using OAuth 2.0 or Open ID Connect 1.0. If the user is not logged
-     * in, they are sent to the login page prior to obtaining an access token.
-     * @return a custom {@link ClientRegistrationIdResolver}
-     */
     private static ClientRegistrationIdResolver authenticationRequiredClientRegistrationIdResolver() {
         ClientRegistrationIdResolver currentUser = currentUserClientRegistrationIdResolver();
         return (request) -> {

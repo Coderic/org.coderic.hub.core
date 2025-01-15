@@ -31,7 +31,5 @@ public class PrincipalResolverConfiguration {
                     AuthorityUtils.createAuthorityList("ROLE_ANONYMOUS"));
             return (request) -> anonymousUser;
         }
-
     }
-
 }
