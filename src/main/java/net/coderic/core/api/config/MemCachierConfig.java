@@ -1,4 +1,4 @@
-package net.coderic.core.api;
+package net.coderic.core.api.config;
 
 import com.google.code.ssm.CacheFactory;
 import com.google.code.ssm.config.AbstractSSMConfiguration;

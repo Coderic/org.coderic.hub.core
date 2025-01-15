@@ -1,4 +1,4 @@
-package net.coderic.core.api;
+package net.coderic.core.api.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
