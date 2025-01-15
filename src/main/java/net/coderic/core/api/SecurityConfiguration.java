@@ -29,20 +29,20 @@ public class SecurityConfiguration {
 
 
         http
-                .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/", "/public/**", "/error").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .oauth2Login((oauth2Login) -> oauth2Login
-                        .loginPage(this.loginPage)
-                )
-                .logout((logout) -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/")
-                        .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler())
-                        .permitAll()
-                )
-                .oauth2Client(Customizer.withDefaults());
+        .authorizeHttpRequests((authorize) -> authorize
+                .requestMatchers("/", "/public/**", "/error").permitAll()
+                .anyRequest().authenticated()
+        )
+        .oauth2Login((oauth2Login) -> oauth2Login
+                .loginPage(this.loginPage)
+        )
+        .logout((logout) -> logout
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/")
+                .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler())
+                .permitAll()
+        )
+        .oauth2Client(Customizer.withDefaults());
 
         return http.build();
     }
