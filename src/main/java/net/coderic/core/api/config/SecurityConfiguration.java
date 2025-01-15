@@ -37,7 +37,8 @@ public class SecurityConfiguration {
                         "/v3/api-docs/**"
                 )
                 .permitAll()
-                .anyRequest().authenticated()
+                .anyRequest()
+                .authenticated()
         )
                 .sessionManagement((sessionManagement) -> sessionManagement
                         .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
@@ -68,7 +69,6 @@ public class SecurityConfiguration {
                 .deleteCookies()
                 .permitAll()
         )
-        .oauth2Client(Customizer.withDefaults())
         /*.headers(
                         headers -> headers
                                 .httpStrictTransportSecurity(
@@ -81,16 +81,14 @@ public class SecurityConfiguration {
                                         new XFrameOptionsHeaderWriter(XFrameOptionsHeaderWriter.XFrameOptionsMode.DENY)
                                 )
                 )
-                */
 
                 .requiresChannel(
                         channel -> channel
                                 .anyRequest()
                                 .requiresSecure()
-                );
-
-    ;
-
+                )
+                */
+                .oauth2Client(Customizer.withDefaults());
         return http.build();
     }
 }
