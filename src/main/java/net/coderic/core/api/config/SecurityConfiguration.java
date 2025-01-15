@@ -25,7 +25,6 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-
         http
         .authorizeHttpRequests((authorize) -> authorize
                 .requestMatchers(
