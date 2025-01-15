@@ -10,7 +10,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.HeaderWriterLogoutHandler;
 import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter;
+import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -26,6 +30,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
         .authorizeHttpRequests((authorize) -> authorize
                 .requestMatchers(
                         "/",
@@ -69,18 +74,17 @@ public class SecurityConfiguration {
                 .deleteCookies()
                 .permitAll()
         )
-        /*.headers(
-                        headers -> headers
-                                .httpStrictTransportSecurity(
-                                        hsts -> hsts
-                                                .includeSubDomains(true)
-                                                .preload(true)
-                                                .maxAgeInSeconds(31536000)
-                                )
-                                .addHeaderWriter(
-                                        new XFrameOptionsHeaderWriter(XFrameOptionsHeaderWriter.XFrameOptionsMode.DENY)
-                                )
-                )
+        .headers(headers -> headers
+            .httpStrictTransportSecurity((hsts) -> hsts
+                    .includeSubDomains(true)
+                    .preload(true)
+                    .maxAgeInSeconds(31536000)
+            )
+            .addHeaderWriter(
+                    new XFrameOptionsHeaderWriter(XFrameOptionsHeaderWriter.XFrameOptionsMode.DENY)
+            )
+        )
+        /*
 
                 .requiresChannel(
                         channel -> channel
@@ -90,5 +94,18 @@ public class SecurityConfiguration {
                 */
                 .oauth2Client(Customizer.withDefaults());
         return http.build();
+    }
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOrigin("*"); // Origen permitido
+        configuration.addAllowedMethod("*"); // Permitir todos los métodos
+        configuration.addAllowedHeader("*"); // Permitir todos los encabezados
+        configuration.getMaxAge();
+        configuration.setAllowCredentials(false); // Permitir credenciales
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration); // Aplicar configuración a todas las rutas
+        return source;
     }
 }
