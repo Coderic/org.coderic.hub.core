@@ -134,9 +134,8 @@ public class SecurityConfiguration {
     }
     @Bean
     public JwtDecoder jwtDecoder() {
-        // Clave simétrica utilizada para descifrar el token (debe coincidir con la configurada en Auth0)
-        String secretKey = System.getenv("OKTA_CLIENT_SECRET"); // Sustituye con la clave proporcionada por Auth0
-
-        return NimbusJwtDecoder.withSecretKey(new SecretKeySpec(secretKey.getBytes(), "AES")).build();
+        // URI del JWKS de Auth0
+        String jwkSetUri = "https://auth.coderic.org/.well-known/jwks.json";
+        return NimbusJwtDecoder.withJwkSetUri(jwkSetUri).build();
     }
 }
