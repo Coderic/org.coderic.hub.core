@@ -98,17 +98,16 @@ public class SecurityConfiguration {
                     new XFrameOptionsHeaderWriter(XFrameOptionsHeaderWriter.XFrameOptionsMode.DENY)
             )
         )
-            .oauth2ResourceServer(oauth2 -> oauth2
-                    .jwt(jwt -> jwt
-                            .jwkSetUri("https://auth.coderic.org/.well-known/jwks.json")
-                            .jwtAuthenticationConverter(jwtAuthenticationConverter()
-                    )
+        .oauth2ResourceServer(oauth2 -> oauth2
+            .jwt(jwt -> jwt
+                    .jwtAuthenticationConverter(jwtAuthenticationConverter())
+                    .jwkSetUri("https://auth.coderic.org/.well-known/jwks.json")
             )
         )
         .requiresChannel(
                 channel -> channel
-                        .anyRequest()
-                        .requiresSecure()
+                .anyRequest()
+                .requiresSecure()
         );
         return http.build();
     }
@@ -130,9 +129,5 @@ public class SecurityConfiguration {
         JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
         // Configura cómo deseas mapear los claims del token JWT a roles/autorizaciones
         return converter;
-    }
-    @Bean
-    public JwtDecoder jwtDecoder() {
-        return JwtDecoders.fromIssuerLocation("https://auth.coderic.org/");
     }
 }
