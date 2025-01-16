@@ -8,6 +8,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtDecoders;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.HeaderWriterLogoutHandler;
 import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter;
@@ -53,7 +56,7 @@ public class SecurityConfiguration {
                         .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
                         .maximumSessions(10)
                 )
-
+/*
                 .oauth2Client(Customizer.withDefaults())
 
         .oauth2Login((oauth2Login) -> oauth2Login
@@ -61,7 +64,7 @@ public class SecurityConfiguration {
                         .loginProcessingUrl("/swagger-ui/index.html")
 
                 //.loginPage(this.loginPage)
-        )
+        )*/
                 /*
         .logout((logout) -> logout
                 .logoutUrl("/logout")
@@ -84,12 +87,7 @@ public class SecurityConfiguration {
                 .deleteCookies()
                 .permitAll()
         )*/
-        .formLogin(httpSecurityFormLoginConfigurer -> httpSecurityFormLoginConfigurer
-                        .loginPage("/login").permitAll()
-                        .defaultSuccessUrl("/index"))
-        .logout(httpSecurityLogoutConfigurer -> httpSecurityLogoutConfigurer.permitAll()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/login"))
+
         .headers(headers -> headers
             .httpStrictTransportSecurity((hsts) -> hsts
                     .includeSubDomains(true)
@@ -98,6 +96,13 @@ public class SecurityConfiguration {
             )
             .addHeaderWriter(
                     new XFrameOptionsHeaderWriter(XFrameOptionsHeaderWriter.XFrameOptionsMode.DENY)
+            )
+        )
+            .oauth2ResourceServer(oauth2 -> oauth2
+                    .jwt(jwt -> jwt
+                            .jwkSetUri("https://auth.coderic.org/.well-known/jwks.json")
+                            .jwtAuthenticationConverter(jwtAuthenticationConverter()
+                    )
             )
         )
         .requiresChannel(
@@ -119,5 +124,15 @@ public class SecurityConfiguration {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration); // allow all paths
         return source;
+    }
+
+    private JwtAuthenticationConverter jwtAuthenticationConverter() {
+        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
+        // Configura cómo deseas mapear los claims del token JWT a roles/autorizaciones
+        return converter;
+    }
+    @Bean
+    public JwtDecoder jwtDecoder() {
+        return JwtDecoders.fromIssuerLocation("https://auth.coderic.org/");
     }
 }
