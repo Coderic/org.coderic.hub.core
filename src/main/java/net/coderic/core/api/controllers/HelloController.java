@@ -9,12 +9,14 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
+
 @RestController
 public class HelloController {
     SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
     @GetMapping("/user")
-    public ResponseEntity<OAuth2User> getUser(@AuthenticationPrincipal OAuth2User principal) {
-        return new ResponseEntity<OAuth2User>(principal, HttpStatus.OK);
+    public ResponseEntity<Principal> getUser(@AuthenticationPrincipal Principal principal) {
+        return new ResponseEntity<Principal>(principal, HttpStatus.OK);
     }
     /*
     @GetMapping("/logout")
