@@ -10,6 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class ApiRestServerApplication  {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ApiRestServerApplication.class, args);
+		SpringApplication
+				.run(ApiRestServerApplication.class, args);
 	}
 }
