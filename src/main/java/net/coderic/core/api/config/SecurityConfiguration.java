@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtDecoders;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.HeaderWriterLogoutHandler;
@@ -20,6 +21,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import javax.crypto.spec.SecretKeySpec;
 import java.util.Arrays;
 
 @Configuration
@@ -129,5 +131,12 @@ public class SecurityConfiguration {
         JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
         // Configura cómo deseas mapear los claims del token JWT a roles/autorizaciones
         return converter;
+    }
+    @Bean
+    public JwtDecoder jwtDecoder() {
+        // Clave simétrica utilizada para descifrar el token (debe coincidir con la configurada en Auth0)
+        String secretKey = System.getenv("OKTA_CLIENT_SECRET"); // Sustituye con la clave proporcionada por Auth0
+
+        return NimbusJwtDecoder.withSecretKey(new SecretKeySpec(secretKey.getBytes(), "AES")).build();
     }
 }
