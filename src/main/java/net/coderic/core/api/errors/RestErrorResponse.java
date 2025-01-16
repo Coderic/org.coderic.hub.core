@@ -1,4 +1,4 @@
-package net.coderic.core.api;
+package net.coderic.core.api.errors;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.http.HttpStatus;

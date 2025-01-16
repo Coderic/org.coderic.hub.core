@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Configuration;
 )
 @Configuration
 public class OpenApi30Config {
-    String schemeName = "bearerAuth";
+    String schemeName = "Bearer Token";
     String bearerFormat = "JWT";
     String scheme = "bearer";
     @Bean

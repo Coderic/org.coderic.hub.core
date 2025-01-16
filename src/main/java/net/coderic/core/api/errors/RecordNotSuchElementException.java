@@ -1,4 +1,4 @@
-package net.coderic.core.api;
+package net.coderic.core.api.errors;
 /**
  * <p>RecordNotSuchElementException class.</p>
  *
@@ -6,11 +6,6 @@ package net.coderic.core.api;
  * @version $Id: $Id
  */
 public class RecordNotSuchElementException extends NoSuchElementFoundException {
-    /**
-     * <p>Constructor for RecordNotSuchElementException.</p>
-     *
-     * @param message a {@link java.lang.String} object
-     */
     public RecordNotSuchElementException(String message) {
         super(message);
     }

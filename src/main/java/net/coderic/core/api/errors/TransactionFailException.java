@@ -1,4 +1,4 @@
-package net.coderic.core.api;
+package net.coderic.core.api.errors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

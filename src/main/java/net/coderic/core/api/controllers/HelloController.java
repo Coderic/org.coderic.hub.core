@@ -15,21 +15,11 @@ import java.security.Principal;
 public class HelloController {
     SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
     @GetMapping("/user")
-    public ResponseEntity<Principal> getUser(@AuthenticationPrincipal Principal principal) {
+    public ResponseEntity<Principal> getUser(Principal principal) {
         return new ResponseEntity<Principal>(principal, HttpStatus.OK);
     }
     @GetMapping("/hello")
     public String hello(Principal principal) {
         return "Hello, " + principal.getName() + "!";
     }
-    /*
-    @GetMapping("/logout")
-    public ResponseEntity<Boolean> getLogout(Authentication authentication, HttpServletRequest request, HttpServletResponse response) {
-
-        this.logoutHandler.logout(request, response, authentication);
-
-        return new ResponseEntity<Boolean>(true, HttpStatus.UNAUTHORIZED);
-    }
-
-    */
 }
