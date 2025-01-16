@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.HeaderWriterLogoutHandler;
@@ -15,6 +16,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -30,7 +33,8 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .cors(AbstractHttpConfigurer::disable)
+                //.cors(cors -> cors.configurationSource(corsConfigurationSource()))
         .authorizeHttpRequests((authorize) -> authorize
                 .requestMatchers(
                         "/",
@@ -98,15 +102,14 @@ public class SecurityConfiguration {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("*"); // Origen permitido
-        configuration.addAllowedMethod("*"); // Permitir todos los métodos
+        configuration.setAllowedOrigins(Arrays.asList("https://example.com", "http://localhost:4200"));
+        configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","PATCH","HEAD","OPTIONS"));
         configuration.addAllowedHeader("Content-Type");
         configuration.addAllowedHeader("Authorization");
         configuration.getMaxAge();
-        configuration.setAllowCredentials(false); // Permitir credenciales
-
+        configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration); // Aplicar configuración a todas las rutas
+        source.registerCorsConfiguration("/**", configuration); // allow all paths
         return source;
     }
 }
