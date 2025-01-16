@@ -33,7 +33,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-                .cors(AbstractHttpConfigurer::disable)
+        .cors(AbstractHttpConfigurer::disable)
                 //.cors(cors -> cors.configurationSource(corsConfigurationSource()))
         .authorizeHttpRequests((authorize) -> authorize
                 .requestMatchers(
@@ -53,8 +53,14 @@ public class SecurityConfiguration {
                         .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
                         .maximumSessions(10)
                 )
+
+                .oauth2Client(Customizer.withDefaults())
+
         .oauth2Login((oauth2Login) -> oauth2Login
-                .loginPage(this.loginPage)
+                //.loginPage()
+                        .loginProcessingUrl("/swagger-ui/index.html")
+
+                //.loginPage(this.loginPage)
         )
                 /*
         .logout((logout) -> logout
@@ -65,7 +71,7 @@ public class SecurityConfiguration {
                 .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler())
                 .permitAll()
         )*/
-        .logout(logout -> logout
+        /*.logout(logout -> logout
                 .addLogoutHandler(
                         new HeaderWriterLogoutHandler(
                                 new ClearSiteDataHeaderWriter(
@@ -77,7 +83,13 @@ public class SecurityConfiguration {
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .deleteCookies()
                 .permitAll()
-        )
+        )*/
+        .formLogin(httpSecurityFormLoginConfigurer -> httpSecurityFormLoginConfigurer
+                        .loginPage("/login").permitAll()
+                        .defaultSuccessUrl("/index"))
+        .logout(httpSecurityLogoutConfigurer -> httpSecurityLogoutConfigurer.permitAll()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutSuccessUrl("/login"))
         .headers(headers -> headers
             .httpStrictTransportSecurity((hsts) -> hsts
                     .includeSubDomains(true)
@@ -88,15 +100,11 @@ public class SecurityConfiguration {
                     new XFrameOptionsHeaderWriter(XFrameOptionsHeaderWriter.XFrameOptionsMode.DENY)
             )
         )
-
-
-                .requiresChannel(
-                        channel -> channel
-                                .anyRequest()
-                                .requiresSecure()
-                )
-
-                .oauth2Client(Customizer.withDefaults());
+        .requiresChannel(
+                channel -> channel
+                        .anyRequest()
+                        .requiresSecure()
+        );
         return http.build();
     }
     @Bean

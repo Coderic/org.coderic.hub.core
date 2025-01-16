@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+      xmlns:sec="ThymeleafSecurityConfig"
+>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -47,7 +48,7 @@ https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/united/bootstrap.min.css
         </button>
         <div class="collapse navbar-collapse" id="navbarColor01">
 
-            <form class="d-flex" th:action="@{/logout}" method="post">
+            <form th:action="@{/logout}" method="post">
                 <button class="btn btn-secondary my-2 my-sm-0" type="submit">Salir</button>
             </form>
         </div>
