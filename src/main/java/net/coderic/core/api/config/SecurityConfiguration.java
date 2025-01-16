@@ -100,7 +100,8 @@ public class SecurityConfiguration {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin("*"); // Origen permitido
         configuration.addAllowedMethod("*"); // Permitir todos los métodos
-        configuration.addAllowedHeader("*"); // Permitir todos los encabezados
+        configuration.addAllowedHeader("Content-Type");
+        configuration.addAllowedHeader("Authorization");
         configuration.getMaxAge();
         configuration.setAllowCredentials(false); // Permitir credenciales
 
