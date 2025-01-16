@@ -88,14 +88,14 @@ public class SecurityConfiguration {
                     new XFrameOptionsHeaderWriter(XFrameOptionsHeaderWriter.XFrameOptionsMode.DENY)
             )
         )
-        /*
+
 
                 .requiresChannel(
                         channel -> channel
                                 .anyRequest()
                                 .requiresSecure()
                 )
-                */
+
                 .oauth2Client(Customizer.withDefaults());
         return http.build();
     }
