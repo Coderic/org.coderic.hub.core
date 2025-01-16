@@ -37,18 +37,13 @@ import java.util.Arrays;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
-    private final String loginPage;
-
-    public SecurityConfiguration(@Value("${app.login-page}") String loginPage) {
-        this.loginPage = loginPage;
-    }
-
+    @Value("${spring.security.oauth2.resourceserver.jwt.jwk-set-uri}")
+    private String jwksUri;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
         .cors(AbstractHttpConfigurer::disable)
-                //.cors(cors -> cors.configurationSource(corsConfigurationSource()))
         .authorizeHttpRequests((authorize) -> authorize
                 .requestMatchers(
                         "/",
@@ -67,38 +62,6 @@ public class SecurityConfiguration {
                         .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
                         .maximumSessions(10)
                 )
-/*
-                .oauth2Client(Customizer.withDefaults())
-
-        .oauth2Login((oauth2Login) -> oauth2Login
-                //.loginPage()
-                        .loginProcessingUrl("/swagger-ui/index.html")
-
-                //.loginPage(this.loginPage)
-        )*/
-                /*
-        .logout((logout) -> logout
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/")
-                .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID")
-                .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler())
-                .permitAll()
-        )*/
-        /*.logout(logout -> logout
-                .addLogoutHandler(
-                        new HeaderWriterLogoutHandler(
-                                new ClearSiteDataHeaderWriter(
-                                        ClearSiteDataHeaderWriter.Directive.CACHE,
-                                        ClearSiteDataHeaderWriter.Directive.COOKIES
-                                )
-                        )
-                )
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .deleteCookies()
-                .permitAll()
-        )*/
-
         .headers(headers -> headers
             .httpStrictTransportSecurity((hsts) -> hsts
                     .includeSubDomains(true)
@@ -109,10 +72,11 @@ public class SecurityConfiguration {
                     new XFrameOptionsHeaderWriter(XFrameOptionsHeaderWriter.XFrameOptionsMode.DENY)
             )
         )
+
         .oauth2ResourceServer(oauth2 -> oauth2
             .jwt(jwt -> jwt
                     .jwtAuthenticationConverter(jwtAuthenticationConverter())
-                    .jwkSetUri("https://auth.coderic.org/.well-known/jwks.json")
+                    .jwkSetUri(jwksUri)
             )
         )
         .requiresChannel(
@@ -138,24 +102,6 @@ public class SecurityConfiguration {
 
     private JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
-        // Configura cómo deseas mapear los claims del token JWT a roles/autorizaciones
         return converter;
     }
-    @Bean
-    public JwtDecoder jwtDecoder() throws IOException, JOSEException, ParseException {
-        // URL del JWKS de Auth0
-        String jwkSetUri = "https://auth.coderic.org/.well-known/jwks.json";
-        JWKSet jwkSet = JWKSet.load(new URL(jwkSetUri));
-        JWK jwk = jwkSet.getKeys().get(0);
-        RSAKey rsaKey = (RSAKey) jwk;
-        RSAPublicKey publicKey = rsaKey.toRSAPublicKey();
-        return NimbusJwtDecoder.withPublicKey(publicKey).build();
-    }
-    /*
-    @Bean
-    public JwtDecoder jwtDecoder() {
-        // URI del JWKS de Auth0
-        String jwkSetUri = "https://auth.coderic.org/.well-known/jwks.json";
-        return NimbusJwtDecoder.withJwkSetUri(jwkSetUri).build();
-    }*/
 }

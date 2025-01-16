@@ -18,6 +18,10 @@ public class HelloController {
     public ResponseEntity<Principal> getUser(@AuthenticationPrincipal Principal principal) {
         return new ResponseEntity<Principal>(principal, HttpStatus.OK);
     }
+    @GetMapping("/hello")
+    public String hello(Principal principal) {
+        return "Hello, " + principal.getName() + "!";
+    }
     /*
     @GetMapping("/logout")
     public ResponseEntity<Boolean> getLogout(Authentication authentication, HttpServletRequest request, HttpServletResponse response) {
