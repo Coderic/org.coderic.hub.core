@@ -1,5 +1,9 @@
 package net.coderic.core.api.config;
 
+import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.jwk.JWK;
+import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jose.jwk.RSAKey;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +26,11 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.crypto.spec.SecretKeySpec;
+import java.io.IOException;
+import java.net.URL;
+import java.security.PublicKey;
+import java.security.interfaces.RSAPublicKey;
+import java.text.ParseException;
 import java.util.Arrays;
 
 @Configuration
@@ -133,9 +142,20 @@ public class SecurityConfiguration {
         return converter;
     }
     @Bean
+    public JwtDecoder jwtDecoder() throws IOException, JOSEException, ParseException {
+        // URL del JWKS de Auth0
+        String jwkSetUri = "https://auth.coderic.org/.well-known/jwks.json";
+        JWKSet jwkSet = JWKSet.load(new URL(jwkSetUri));
+        JWK jwk = jwkSet.getKeys().get(0);
+        RSAKey rsaKey = (RSAKey) jwk;
+        RSAPublicKey publicKey = rsaKey.toRSAPublicKey();
+        return NimbusJwtDecoder.withPublicKey(publicKey).build();
+    }
+    /*
+    @Bean
     public JwtDecoder jwtDecoder() {
         // URI del JWKS de Auth0
         String jwkSetUri = "https://auth.coderic.org/.well-known/jwks.json";
         return NimbusJwtDecoder.withJwkSetUri(jwkSetUri).build();
-    }
+    }*/
 }
