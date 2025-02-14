@@ -1,4 +1,4 @@
-package net.coderic.core.api.controllers;
+package org.coderic.hub.core.controllers;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;

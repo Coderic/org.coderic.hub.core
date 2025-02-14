@@ -1,4 +1,4 @@
-package net.coderic.core.api.config;
+package org.coderic.hub.core.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

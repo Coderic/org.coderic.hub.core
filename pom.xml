@@ -8,11 +8,11 @@
 		<version>3.4.1</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>net.coderic.core</groupId>
-	<artifactId>api</artifactId>
+	<groupId>org.coderic.hub</groupId>
+	<artifactId>core</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>API Rest Server</name>
-	<description>Coderic Hub Endpoint</description>
+	<name>Coderic Hub</name>
+	<description>Coderic Hub Core</description>
 	<url/>
 	<licenses>
 		<license/>

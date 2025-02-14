@@ -1,4 +1,4 @@
-package net.coderic.core.api.config;
+package org.coderic.hub.core.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.*;

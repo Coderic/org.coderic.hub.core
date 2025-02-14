@@ -1,4 +1,4 @@
-package net.coderic.core.api.errors;
+package org.coderic.hub.core.errors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,4 +1,4 @@
-package net.coderic.core.api;
+package org.coderic.hub.core;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

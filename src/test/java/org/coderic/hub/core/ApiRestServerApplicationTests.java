@@ -1,4 +1,4 @@
-package net.coderic.core.api;
+package org.coderic.hub.core;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

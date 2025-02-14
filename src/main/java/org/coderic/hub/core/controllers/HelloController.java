@@ -1,4 +1,4 @@
-package net.coderic.core.api.controllers;
+package org.coderic.hub.core.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

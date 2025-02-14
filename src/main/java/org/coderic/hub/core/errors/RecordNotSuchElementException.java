@@ -1,4 +1,4 @@
-package net.coderic.core.api.errors;
+package org.coderic.hub.core.errors;
 /**
  * <p>RecordNotSuchElementException class.</p>
  *
