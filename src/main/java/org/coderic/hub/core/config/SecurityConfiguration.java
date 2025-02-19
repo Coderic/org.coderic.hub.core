@@ -25,10 +25,10 @@ public class SecurityConfiguration {
         .authorizeHttpRequests((authorize) -> authorize
                 .requestMatchers(
                         "/",
-                        "/home.html",
-                        "/public/**",
                         "/error",
-                        "/swagger-ui/home.html",
+                        "/actuator/info",
+                        "/swagger-ui.html",
+                        "/swagger-ui/index.html",
                         "/swagger-ui/**",
                         "/v3/api-docs/**"
                 )
@@ -41,11 +41,6 @@ public class SecurityConfiguration {
                         .maximumSessions(10)
                 )
         .headers(headers -> headers
-            .httpStrictTransportSecurity((hsts) -> hsts
-                    .includeSubDomains(true)
-                    .preload(true)
-                    .maxAgeInSeconds(31536000)
-            )
             .addHeaderWriter(
                     new XFrameOptionsHeaderWriter(XFrameOptionsHeaderWriter.XFrameOptionsMode.DENY)
             )
@@ -56,11 +51,6 @@ public class SecurityConfiguration {
                     .jwtAuthenticationConverter(jwtAuthenticationConverter())
                     .jwkSetUri(jwksUri)
             )
-        )
-        .requiresChannel(
-                channel -> channel
-                .anyRequest()
-                .requiresSecure()
         );
         return http.build();
     }
