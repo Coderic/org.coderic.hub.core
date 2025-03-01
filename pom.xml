@@ -190,6 +190,7 @@
 					<url>https://api.coderic.net:8443/manager/text</url>
 					<update>true</update>
 					<path>/</path>
+					<finalName>ROOT##${project.version}.war</finalName>
 					<ignorePackaging>true</ignorePackaging>
 					<tag>${project.version}</tag>
 					<mode>war</mode>
