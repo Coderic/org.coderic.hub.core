@@ -6,6 +6,7 @@ concurrency:
   cancel-in-progress: false
 permissions:
   contents: read
+  packages: write
   pages: write
   id-token: write
 jobs:
@@ -46,9 +47,21 @@ jobs:
   deploy:
     runs-on: ubuntu-24.04
     needs: build
-    permissions:
-      contents: read
-      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Maven Central Repository
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: 'temurin'
+          cache: maven
+      - name: Deploy package
+        run: mvn --batch-mode deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  staging:
+    runs-on: ubuntu-24.04
+    needs: build
     steps:
       - uses: actions/checkout@v4
       - run: sed -i 's|http://localhost:8080/|${{ secrets.TOMCAT_HOST }}|g' pom.xml

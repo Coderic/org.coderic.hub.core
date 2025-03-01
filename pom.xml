@@ -207,4 +207,10 @@
 			</snapshots>
 		</repository>
 	</repositories>
+	<distributionManagement>
+		<repository>
+			<id>github</id>
+			<url>https://maven.pkg.github.com/Coderic/org.coderic.hub.core</url>
+		</repository>
+	</distributionManagement>
 </project>
