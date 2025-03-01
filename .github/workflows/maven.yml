@@ -33,6 +33,10 @@ jobs:
           java-version: 21
           distribution: 'temurin'
           cache: maven
+      - name: Deploy package
+        run: mvn --batch-mode deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Deploy site
         run: mvn clean site --file pom.xml
       - name: Setup Pages
@@ -44,23 +48,11 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-  deploy:
-    runs-on: ubuntu-24.04
-    needs: build
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up Maven Central Repository
-        uses: actions/setup-java@v4
-        with:
-          java-version: 21
-          distribution: 'temurin'
-          cache: maven
-      - name: Deploy package
-        run: mvn --batch-mode deploy
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   staging:
     runs-on: ubuntu-24.04
+    environment:
+        name: staging
+        url: ${{ steps.deployment.outputs.url }}
     needs: build
     steps:
       - uses: actions/checkout@v4
