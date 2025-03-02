@@ -22,12 +22,12 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Test with Maven
-        run: mvn --batch-mode clean test verify --file pom.xml
+        run: ./mvnw --batch-mode test verify --file pom.xml
   build:
     runs-on: ubuntu-24.04
     needs: test
     environment:
-      name: staging
+      name: release
       url: ${{ steps.deployment.outputs.url }}
     steps:
       - uses: actions/checkout@v4
@@ -37,8 +37,11 @@ jobs:
           java-version: 21
           distribution: 'temurin'
           cache: maven
-      - name: Build package
-        run: mvn --batch-mode package --file pom.xml
+      - name: Deploy package
+        id: deployment
+        run: ./mvnw --batch-mode deploy --file pom.xml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   deploy:
     runs-on: ubuntu-24.04
     environment:
@@ -58,8 +61,7 @@ jobs:
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
       - name: Deploy package
-        run: mvn --batch-mode tomcat7:deploy deploy --file pom.xml
+        run: ./mvnw --batch-mode tomcat7:deploy --file pom.xml
         env:
           MAVEN_USERNAME: ${{ secrets.TOMCAT_USER }}
           MAVEN_PASSWORD: ${{ secrets.TOMCAT_PASS }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
