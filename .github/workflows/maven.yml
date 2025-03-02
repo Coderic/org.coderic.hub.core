@@ -51,7 +51,7 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-  staging:
+  deploy:
     runs-on: ubuntu-24.04
     environment:
         name: staging
@@ -70,7 +70,7 @@ jobs:
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
       - name: Deploy package
-        run: mvn --batch-mode tomcat7:deploy
+        run: mvn --batch-mode tomcat7:deploy --file pom.xml
         env:
           MAVEN_USERNAME: ${{ secrets.TOMCAT_USER }}
           MAVEN_PASSWORD: ${{ secrets.TOMCAT_PASS }}
