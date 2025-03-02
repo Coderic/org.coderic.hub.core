@@ -22,5 +22,6 @@ jobs:
           java-version: 22
           distribution: temurin
           cache: maven
+
       - name: Test with Maven
         run: mvn clean test --file pom.xml

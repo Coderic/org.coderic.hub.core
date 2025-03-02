@@ -6,7 +6,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.4.2</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
 	</parent>
 	<groupId>org.coderic.hub</groupId>
 	<artifactId>core</artifactId>
@@ -24,7 +24,6 @@
 		<license>
 			<name>Apache license</name>
 			<url>./LICENSE</url>
-			<distribution>manual</distribution>
 		</license>
 	</licenses>
 	<developers>
@@ -48,7 +47,7 @@
 	</scm>
 	<ciManagement>
 		<system>GitHub</system>
-		<url>https://github.com/Coderic/org.coderic.hub.core/actions/</url>
+		<url>https://github.com/Coderic/org.coderic.hub.core/actions</url>
 	</ciManagement>
 	<issueManagement>
 		<system>GitHub</system>

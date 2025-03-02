@@ -1,6 +1,9 @@
 name: Deploy Maven site to GitHub Pages
 
-on: workflow_dispatch
+on:
+  workflow_dispatch: {}
+  issues: {}
+  release: {}
 concurrency:
   group: github-pages
   cancel-in-progress: false
