@@ -1,0 +1,83 @@
+name: Deploy Maven site to GitHub Pages
+
+on:
+  workflow_dispatch: {}
+  issues: {}
+  release: {}
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+permissions:
+  contents: read
+  packages: write
+  pages: write
+  issues: write
+  discussions: write
+  id-token: write
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: 'temurin'
+          cache: maven
+      - name: Test with Maven
+        run: mvn clean test --file pom.xml
+  build:
+    runs-on: ubuntu-24.04
+    needs: test
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: 'temurin'
+          cache: maven
+      - name: Deploy package
+        run: mvn --batch-mode deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Deploy site
+        run: mvn clean site --file pom.xml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload Artifacts
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./target/site
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+  deploy:
+    runs-on: ubuntu-24.04
+    environment:
+        name: staging
+        url: ${{ steps.deployment.outputs.url }}
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+      - run: sed -i 's|http://localhost:8080/|${{ secrets.TOMCAT_HOST }}|g' pom.xml
+      - name: Set up Maven Central Repository
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: 'temurin'
+          cache: maven
+          server-id: TomcatServer
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
+      - name: Deploy package
+        run: mvn --batch-mode tomcat7:deploy --file pom.xml
+        env:
+          MAVEN_USERNAME: ${{ secrets.TOMCAT_USER }}
+          MAVEN_PASSWORD: ${{ secrets.TOMCAT_PASS }}
