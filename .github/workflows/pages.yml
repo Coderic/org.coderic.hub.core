@@ -9,10 +9,8 @@ concurrency:
   cancel-in-progress: false
 permissions:
   contents: read
-  packages: write
+  issues: read
   pages: write
-  issues: write
-  discussions: write
   id-token: write
 jobs:
   test:
@@ -26,7 +24,7 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Test with Maven
-        run: mvn clean test --file pom.xml
+        run: mvn clean test verify --file pom.xml
   build:
     runs-on: ubuntu-24.04
     needs: test
@@ -41,10 +39,6 @@ jobs:
           java-version: 21
           distribution: 'temurin'
           cache: maven
-      - name: Deploy package
-        run: mvn --batch-mode deploy
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Deploy site
         run: mvn clean site --file pom.xml
         env:
@@ -58,26 +52,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-  deploy:
-    runs-on: ubuntu-24.04
-    environment:
-        name: staging
-        url: ${{ steps.deployment.outputs.url }}
-    needs: build
-    steps:
-      - uses: actions/checkout@v4
-      - run: sed -i 's|http://localhost:8080/|${{ secrets.TOMCAT_HOST }}|g' pom.xml
-      - name: Set up Maven Central Repository
-        uses: actions/setup-java@v4
-        with:
-          java-version: 21
-          distribution: 'temurin'
-          cache: maven
-          server-id: TomcatServer
-          server-username: MAVEN_USERNAME
-          server-password: MAVEN_PASSWORD
-      - name: Deploy package
-        run: mvn --batch-mode tomcat7:deploy --file pom.xml
-        env:
-          MAVEN_USERNAME: ${{ secrets.TOMCAT_USER }}
-          MAVEN_PASSWORD: ${{ secrets.TOMCAT_PASS }}
