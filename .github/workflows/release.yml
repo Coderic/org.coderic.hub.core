@@ -10,6 +10,7 @@ permissions:
   contents: read
   packages: write
   id-token: write
+  attestations: write
 jobs:
   test:
     runs-on: ubuntu-24.04
@@ -37,6 +38,12 @@ jobs:
           java-version: 21
           distribution: 'temurin'
           cache: maven
+      - name: Build package
+        run: ./mvnw --batch-mode package --file pom.xml
+      - name: Attest build provenance
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: target/*.war
       - name: Deploy package
         id: deployment
         run: ./mvnw --batch-mode deploy --file pom.xml
