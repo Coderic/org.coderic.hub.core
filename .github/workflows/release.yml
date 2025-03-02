@@ -1,4 +1,4 @@
-name: Deploy Maven site to GitHub Pages
+name: Deploy Maven Release
 
 on:
   workflow_dispatch: {}
