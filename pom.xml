@@ -23,7 +23,7 @@
 	<licenses>
 		<license>
 			<name>Apache license</name>
-			<url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<url>./LICENSE</url>
 			<distribution>manual</distribution>
 		</license>
 	</licenses>
@@ -43,16 +43,12 @@
 	<scm>
 		<connection>scm:git:https://github.com/Coderic/org.coderic.hub.core.git</connection>
 		<developerConnection>scm:git:git@github.com:Coderic/org.coderic.hub.core.git</developerConnection>
-		<url>http://github.com/Coderic/org.coderic.hub.core</url>
+		<url>https://github.com/Coderic/org.coderic.hub.core</url>
+		<tag>HEAD</tag>
 	</scm>
 	<ciManagement>
-		<system>GitHub Actions</system>
-		<url>https://github.com/Coderic/org.coderic.hub.core/actions</url>
-		<notifiers>
-			<notifier>
-
-			</notifier>
-		</notifiers>
+		<system>GitHub</system>
+		<url>https://github.com/Coderic/org.coderic.hub.core/actions/</url>
 	</ciManagement>
 	<issueManagement>
 		<system>GitHub</system>
@@ -176,30 +172,6 @@
 				<version>3.9.0</version>
 			</plugin>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.5.2</version>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-changes-plugin</artifactId>
-				<version>3.0.0-M2</version>
-				<configuration>
-					<includeOpenIssues>true</includeOpenIssues>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<goals>
-							<goal>repackage</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>
 				<artifactId>tomcat7-maven-plugin</artifactId>
 				<version>2.2</version>
@@ -228,11 +200,46 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-report-plugin</artifactId>
+				<version>3.5.1</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>3.9.0</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-changes-plugin</artifactId>
+				<version>3.0.0-M2</version>
+				<configuration>
+					<includeOpenIssues>true</includeOpenIssues>
+					<onlyMilestoneIssues>false</onlyMilestoneIssues>
+				</configuration>
 				<reportSets>
 					<reportSet>
 						<reports>
-							<report>github-changes</report>
+							<report>github-report</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>3.10.1</version>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>javadoc</report>
+							<report>test-javadoc</report>
+						</reports>
+					</reportSet>
+					<reportSet>
+						<id>aggregate</id>
+						<inherited>false</inherited>
+						<reports>
+							<report>aggregate</report>
 						</reports>
 					</reportSet>
 				</reportSets>
