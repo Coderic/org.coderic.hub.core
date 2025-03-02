@@ -43,7 +43,7 @@
 	<scm>
 		<connection>scm:git:https://github.com/Coderic/org.coderic.hub.core.git</connection>
 		<developerConnection>scm:git:git@github.com:Coderic/org.coderic.hub.core.git</developerConnection>
-		<url>http://github.com/Coderic/org.coderic.hub.core/tree/master</url>
+		<url>http://github.com/Coderic/org.coderic.hub.core</url>
 	</scm>
 	<ciManagement>
 		<system>GitHub Actions</system>

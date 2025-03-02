@@ -1,0 +1,9 @@
+Created-By: Apache Maven
+Main-Class: org.coderic.hub.core.ApiRestServerApplication
+Manifest-Version: 2.0
+Name: coderic/hub-core
+Specification-Title: Coderic Hub Core
+Specification-Version: 1.0
+Specification-Vendor: Coderic
+Implementation-Title: Coderic Hub Core
+Implementation-Vendor: Coderic
