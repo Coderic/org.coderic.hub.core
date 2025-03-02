@@ -8,6 +8,8 @@ permissions:
   contents: read
   packages: write
   pages: write
+  issues: write
+  discussions: write
   id-token: write
 jobs:
   test:
