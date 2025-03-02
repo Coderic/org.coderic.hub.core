@@ -243,6 +243,13 @@
 						</reports>
 					</reportSet>
 				</reportSets>
+				<configuration>
+					<show>protected</show>
+					<show>package</show>
+					<show>private</show>
+					<show>public</show>
+					<failOnError>false</failOnError>
+				</configuration>
 			</plugin>
 		</plugins>
 	</reporting>
