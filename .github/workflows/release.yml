@@ -13,6 +13,7 @@ permissions:
   attestations: write
 env:
   GPG_PASSPHRASE: ${{ secrets.RELEASES_GPG_PASSPHRASE }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 jobs:
   test:
     runs-on: ubuntu-24.04
@@ -42,16 +43,25 @@ jobs:
           distribution: 'temurin'
           cache: maven
           gpg-private-key: ${{ secrets.RELEASES_GPG_PRIVATE_KEY }}
+          settings-path: ${{ github.workspace }}
+      - name: Import GPG Key
+        run: |
+          echo "${{ secrets.RELEASES_GPG_PRIVATE_KEY }}" | gpg --batch --import
+          gpg --export-secret-keys --armor 59FD6DD612674446 > /home/runner/.gnupg/secring.gpg
+      - name: Set GitHub Credentials
+        run: |
+          git config --global credential.helper 'cache --timeout=3600'
+          git config --global credential.username "github-actions[bot]"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
       - name: Configure Git
         run: |
           git config --global user.email "coderic@coderic.org"
           git config --global user.name "Coderic"
-          echo "${{ secrets.RELEASES_GPG_PRIVATE_KEY }}" | gpg --batch --import
-          gpg --list-secret-keys --keyid-format=long
+          git config --global user.signingkey 59FD6DD612674446
+          git config --global commit.gpgsign true
+          git config --global push.default simple
       - name: Build package
-        run: ./mvnw --batch-mode release:prepare  --file pom.xml
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./mvnw --batch-mode release:prepare --file pom.xml
       - name: Attest build provenance
         uses: actions/attest-build-provenance@v2
         with:
@@ -59,8 +69,6 @@ jobs:
       - name: Deploy release
         id: deployment
         run: ./mvnw --batch-mode release:perform --file pom.xml
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   deploy:
     runs-on: ubuntu-24.04
     environment:
