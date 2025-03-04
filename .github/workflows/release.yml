@@ -56,7 +56,7 @@ jobs:
         run: |
           echo "${{ secrets.RELEASES_GPG_PRIVATE_KEY }}" | gpg --batch --import
           gpg --list-secret-keys --keyid-format=long
-          gpg --export-secret-keys --armor 59FD6DD612674446 > /home/runner/.gnupg/secring.gpg
+          gpg --export-secret-keys --no-tty --armor 59FD6DD612674446 > /home/runner/.gnupg/secring.gpg
       - name: Configure Git
         run: |
           git config --global user.email "coderic@coderic.org"
