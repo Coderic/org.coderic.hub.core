@@ -14,6 +14,7 @@ permissions:
 env:
   GPG_PASSPHRASE: ${{ secrets.RELEASES_GPG_PASSPHRASE }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GPG_TTY: $(tty)
 jobs:
   test:
     runs-on: ubuntu-24.04
