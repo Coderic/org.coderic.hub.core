@@ -42,6 +42,10 @@ jobs:
           distribution: 'temurin'
           cache: maven
           gpg-private-key: ${{ secrets.RELEASES_GPG_PRIVATE_KEY }}
+      - name: Configure Git
+        run: |
+          git config --global user.email "coderic@coderic.org"
+          git config --global user.name "Coderic"
       - name: Build package
         run: ./mvnw --batch-mode release:prepare  --file pom.xml
       - name: Attest build provenance
