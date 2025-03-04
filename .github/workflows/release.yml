@@ -46,6 +46,8 @@ jobs:
         run: |
           git config --global user.email "coderic@coderic.org"
           git config --global user.name "Coderic"
+          echo "${{ secrets.RELEASES_GPG_PRIVATE_KEY }}" | gpg --batch --import
+          gpg --list-secret-keys --keyid-format=long
       - name: Build package
         run: ./mvnw --batch-mode release:prepare  --file pom.xml
       - name: Attest build provenance
