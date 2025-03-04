@@ -47,6 +47,7 @@ jobs:
       - name: Configure GPG
         run: |
           mkdir -p ~/.gnupg
+          chmod 700 ~/.gnupg
           echo "use-agent" >> ~/.gnupg/gpg.conf
           echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
           echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
@@ -60,9 +61,12 @@ jobs:
         run: |
           git config --global user.email "coderic@coderic.org"
           git config --global user.name "Coderic"
-          git config --global user.signingkey 59FD6DD612674446
           git config --global commit.gpgsign true
-          git config --global push.default simple
+          git config --global user.signingkey 59FD6DD612674446
+          git config --global gpg.program gpg
+          git config --global gpg.format openpgp
+          git config --global commit.gpgsign true
+          echo RELOADAGENT | gpg-connect-agent
       - name: Set GitHub Credentials
         run: |
           git config --global credential.helper 'cache --timeout=3600'
@@ -71,6 +75,7 @@ jobs:
       - name: Verify GPG Signing
         run: |
           echo "test" | gpg --clearsign
+          echo "test" | gpg --clearsign --batch --yes --passphrase "${{ secrets.RELEASES_GPG_PASSPHRASE }}"
       - name: Build package
         run: ./mvnw --batch-mode release:prepare --file pom.xml
       - name: Attest build provenance
