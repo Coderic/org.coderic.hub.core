@@ -19,7 +19,7 @@ jobs:
           java-version: 21
           distribution: temurin
           cache: maven
-          gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+          gpg-private-key: ${{ secrets.RELEASES_GPG_PRIVATE_KEY }}
           gpg-passphrase: GPG_PASSPHRASE
       - name: Test with Maven
         run: ./mvnw clean verify --file pom.xml
