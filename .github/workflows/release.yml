@@ -11,6 +11,8 @@ permissions:
   packages: write
   id-token: write
   attestations: write
+env:
+  GPG_PASSPHRASE: ${{ secrets.RELEASES_GPG_PASSPHRASE }}
 jobs:
   test:
     runs-on: ubuntu-24.04
@@ -22,6 +24,7 @@ jobs:
           java-version: 21
           distribution: 'temurin'
           cache: maven
+          gpg-private-key: ${{ secrets.RELEASES_GPG_PRIVATE_KEY }}
       - name: Test with Maven
         run: ./mvnw --batch-mode test verify --file pom.xml
   build:
@@ -38,8 +41,7 @@ jobs:
           java-version: 21
           distribution: 'temurin'
           cache: maven
-          gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
-          gpg-passphrase: MAVEN_GPG_PASSPHRASE
+          gpg-private-key: ${{ secrets.RELEASES_GPG_PRIVATE_KEY }}
       - name: Build package
         run: ./mvnw --batch-mode package --file pom.xml
       - name: Attest build provenance
@@ -51,8 +53,6 @@ jobs:
         run: ./mvnw --batch-mode deploy --file pom.xml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.RELEASES_GPG_PASSPHRASE }}
-          MAVEN_GPG_KEY: ${{ secrets.RELEASES_GPG_PRIVATE_KEY }}
   deploy:
     runs-on: ubuntu-24.04
     environment:
@@ -71,6 +71,7 @@ jobs:
           server-id: TomcatServer
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
+          gpg-private-key: ${{ secrets.RELEASES_GPG_PRIVATE_KEY }}
       - name: Deploy package
         run: ./mvnw --batch-mode tomcat7:deploy --file pom.xml
         env:
