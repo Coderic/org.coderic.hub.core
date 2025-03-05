@@ -13,7 +13,6 @@ permissions:
   attestations: write
 env:
   GPG_PASSPHRASE: ${{ secrets.RELEASES_GPG_PASSPHRASE }}
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 jobs:
   test:
     runs-on: ubuntu-24.04
@@ -43,23 +42,17 @@ jobs:
           distribution: 'temurin'
           cache: maven
           gpg-private-key: ${{ secrets.RELEASES_GPG_PRIVATE_KEY }}
-          settings-path: ${{ github.workspace }}
-      - name: Set GitHub Credentials
-        run: |
-          git config --global credential.helper 'cache --timeout=3600'
-          git config --global credential.username "github-actions[bot]"
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
       - name: Build package
-        run: ./mvnw --batch-mode release:prepare --file pom.xml
-        env:
-          GPG_PASSPHRASE: ${{ secrets.RELEASES_GPG_PASSPHRASE }}
+        run: ./mvnw --batch-mode package --file pom.xml
       - name: Attest build provenance
         uses: actions/attest-build-provenance@v2
         with:
           subject-path: target/*.war
-      - name: Deploy release
+      - name: Deploy package
         id: deployment
-        run: ./mvnw --batch-mode release:perform --file pom.xml
+        run: ./mvnw --batch-mode deploy --file pom.xml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   deploy:
     runs-on: ubuntu-24.04
     environment:
