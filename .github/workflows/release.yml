@@ -63,6 +63,8 @@ jobs:
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
       - name: Build package
         run: ./mvnw --batch-mode release:prepare --file pom.xml
+        env:
+          GPG_PASSPHRASE: ${{ secrets.RELEASES_GPG_PASSPHRASE }}
       - name: Attest build provenance
         uses: actions/attest-build-provenance@v2
         with:
