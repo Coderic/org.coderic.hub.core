@@ -6,10 +6,8 @@ on:
   pull_request:
     branches: [ "master" ]
 permissions:
-  contents: read
+  contents: write
   id-token: write
-env:
-  GPG_PASSPHRASE: ${{ secrets.RELEASES_GPG_PASSPHRASE }}
 jobs:
   test:
     runs-on: ubuntu-24.04
@@ -27,3 +25,4 @@ jobs:
         run: ./mvnw clean verify --file pom.xml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GPG_PASSPHRASE: ${{ secrets.RELEASES_GPG_PASSPHRASE }}
