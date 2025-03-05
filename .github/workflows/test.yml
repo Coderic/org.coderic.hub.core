@@ -7,6 +7,8 @@ on:
     branches: [ "master" ]
 permissions:
   contents: read
+env:
+  GPG_PASSPHRASE: ${{ secrets.RELEASES_GPG_PASSPHRASE }}
 jobs:
   test:
     runs-on: ubuntu-24.04
@@ -22,5 +24,3 @@ jobs:
           gpg-private-key: ${{ secrets.RELEASES_GPG_PRIVATE_KEY }}
       - name: Test with Maven
         run: ./mvnw clean verify --file pom.xml
-        env:
-          GPG_PASSPHRASE: ${{ secrets.RELEASES_GPG_PASSPHRASE }}

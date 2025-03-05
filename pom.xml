@@ -9,7 +9,7 @@
 	</parent>
 	<groupId>org.coderic.hub</groupId>
 	<artifactId>core</artifactId>
-	<version>0.0.3</version>
+	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>Coderic Hub</name>
 	<description>Coderic Hub Core</description>
