@@ -56,17 +56,6 @@ jobs:
         run: |
           echo "${{ secrets.RELEASES_GPG_PRIVATE_KEY }}" | gpg --batch --import
           gpg --list-secret-keys --keyid-format=long
-          gpg --export-secret-keys --no-tty --armor 59FD6DD612674446 > /home/runner/.gnupg/secring.gpg
-      - name: Configure Git
-        run: |
-          git config --global user.email "coderic@coderic.org"
-          git config --global user.name "Coderic"
-          git config --global commit.gpgsign true
-          git config --global user.signingkey 59FD6DD612674446
-          git config --global gpg.program gpg
-          git config --global gpg.format openpgp
-          git config --global commit.gpgsign true
-          echo RELOADAGENT | gpg-connect-agent
       - name: Set GitHub Credentials
         run: |
           git config --global credential.helper 'cache --timeout=3600'
