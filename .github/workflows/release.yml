@@ -61,9 +61,6 @@ jobs:
           git config --global credential.helper 'cache --timeout=3600'
           git config --global credential.username "github-actions[bot]"
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-      - name: Verify GPG Signing
-        run: |
-          echo "test" | gpg --clearsign
       - name: Build package
         run: ./mvnw --batch-mode release:prepare --file pom.xml
       - name: Attest build provenance
