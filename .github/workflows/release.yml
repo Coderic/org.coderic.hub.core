@@ -44,6 +44,8 @@ jobs:
           gpg-private-key: ${{ secrets.RELEASES_GPG_PRIVATE_KEY }}
       - name: Set GitHub Credentials
         run: |
+          git config --global user.name "$(git --no-pager log --format=format:'%an' -n 1)"
+          git config --global user.email "$(git --no-pager log --format=format:'%ae' -n 1)"
           git config --global credential.helper 'cache --timeout=3600'
           git config --global credential.username "github-actions[bot]"
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
