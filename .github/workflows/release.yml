@@ -13,6 +13,7 @@ permissions:
   attestations: write
 env:
   GPG_PASSPHRASE: ${{ secrets.RELEASES_GPG_PASSPHRASE }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 jobs:
   test:
     runs-on: ubuntu-24.04
@@ -54,13 +55,9 @@ jobs:
           subject-path: target/*.war
       - name: Prepare package
         run: ./mvnw --batch-mode release:prepare -DtagNameFormat=@{project.version} --file pom.xml
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Deploy package
         id: deployment
-        run: ./mvnw --batch-mode release:perform --file pom.xml
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./mvnw --batch-mode release:perform -DtagNameFormat=@{project.version} --file pom.xml
   deploy:
     runs-on: ubuntu-24.04
     environment:
