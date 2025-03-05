@@ -53,9 +53,13 @@ jobs:
         uses: actions/attest-build-provenance@v2
         with:
           subject-path: target/*.war
+      - name: Prepare package
+        run: ./mvnw --batch-mode release:prepare --file pom.xml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Deploy package
         id: deployment
-        run: ./mvnw --batch-mode release:prepare --file pom.xml
+        run: ./mvnw --batch-mode release:perform --file pom.xml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   deploy:
