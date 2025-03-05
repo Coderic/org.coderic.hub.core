@@ -64,7 +64,6 @@ jobs:
       - name: Verify GPG Signing
         run: |
           echo "test" | gpg --clearsign
-          echo "test" | gpg --clearsign --batch --yes --passphrase "${{ secrets.RELEASES_GPG_PASSPHRASE }}"
       - name: Build package
         run: ./mvnw --batch-mode release:prepare --file pom.xml
       - name: Attest build provenance
