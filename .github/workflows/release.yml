@@ -44,10 +44,12 @@ jobs:
           gpg-private-key: ${{ secrets.RELEASES_GPG_PRIVATE_KEY }}
       - name: Set GitHub Credentials
         run: |
-          git config --global user.name "$(git --no-pager log --format=format:'%an' -n 1)"
-          git config --global user.email "$(git --no-pager log --format=format:'%ae' -n 1)"
+          git config --global user.name "Coderic"
+          git config --global user.email "coderic@coderic.org"
           git config --global credential.helper 'cache --timeout=3600'
           git config --global credential.username "github-actions[bot]"
+      - name: Set remote URL to HTTPS
+        run: |
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
       - name: Build package
         run: ./mvnw --batch-mode package --file pom.xml
@@ -58,12 +60,12 @@ jobs:
       - name: Prepare package
         run: ./mvnw --batch-mode release:prepare --file pom.xml
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Deploy package
         id: deployment
         run: ./mvnw --batch-mode release:perform --file pom.xml
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   deploy:
     runs-on: ubuntu-24.04
     environment:
