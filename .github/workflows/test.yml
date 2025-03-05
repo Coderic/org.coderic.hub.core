@@ -7,9 +7,11 @@ on:
     branches: [ "master" ]
 permissions:
   contents: write
+  packages: write
   id-token: write
 env:
   GPG_PASSPHRASE: ${{ secrets.RELEASES_GPG_PASSPHRASE }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 jobs:
   test:
     runs-on: ubuntu-24.04
@@ -23,9 +25,5 @@ jobs:
           distribution: temurin
           cache: maven
           gpg-private-key: ${{ secrets.RELEASES_GPG_PRIVATE_KEY }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Test with Maven
         run: ./mvnw clean verify --file pom.xml
-        env:
-          GPG_PASSPHRASE: ${{ secrets.RELEASES_GPG_PASSPHRASE }}
