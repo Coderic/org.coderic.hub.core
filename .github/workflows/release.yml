@@ -44,18 +44,6 @@ jobs:
           cache: maven
           gpg-private-key: ${{ secrets.RELEASES_GPG_PRIVATE_KEY }}
           settings-path: ${{ github.workspace }}
-      - name: Configure GPG
-        run: |
-          mkdir -p ~/.gnupg
-          chmod 700 ~/.gnupg
-          echo "use-agent" >> ~/.gnupg/gpg.conf
-          echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
-          echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
-          gpgconf --kill gpg-agent
-      - name: Import GPG Key
-        run: |
-          echo "${{ secrets.RELEASES_GPG_PRIVATE_KEY }}" | gpg --batch --import
-          gpg --list-secret-keys --keyid-format=long
       - name: Set GitHub Credentials
         run: |
           git config --global credential.helper 'cache --timeout=3600'
