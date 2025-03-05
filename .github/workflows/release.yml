@@ -46,9 +46,6 @@ jobs:
         run: |
           git config --global user.name "Coderic"
           git config --global user.email "coderic@coderic.org"
-      - name: Set remote URL to HTTPS
-        run: |
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
       - name: Build package
         run: ./mvnw --batch-mode package --file pom.xml
       - name: Attest build provenance
