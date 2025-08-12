@@ -18,7 +18,7 @@ jobs:
   test:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
@@ -35,7 +35,7 @@ jobs:
       name: release
       url: ${{ steps.deployment.outputs.url }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
@@ -65,7 +65,7 @@ jobs:
       url: ${{ steps.deployment.outputs.url }}
     needs: build
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - run: sed -i 's|http://localhost:8080/|${{ secrets.TOMCAT_HOST }}|g' pom.xml
       - name: Set up Maven Central Repository
         uses: actions/setup-java@v4
